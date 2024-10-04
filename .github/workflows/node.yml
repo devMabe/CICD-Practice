@@ -5,9 +5,9 @@ name: Node.js CI
 
 on:
   push:
-    branches: ["main"]
+    branches: ['main']
   pull_request:
-    branches: ["main"]
+    branches: ['main']
 
 jobs:
   build:
@@ -20,10 +20,17 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
+      - name: Build Dokcer Mongo Image
+        run: docker pull mongo
+
+      - name: Run Docker Mongo Container
+        run: docker container run --name mydatabase --publish 27017:27017 -d mongo
+
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-          cache: "npm"
+          cache: 'npm'
       - run: npm ci
       - run: npm test
